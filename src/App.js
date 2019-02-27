@@ -1,25 +1,31 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react';
+import { Row, Container } from 'react-bootstrap';
+import Navbar from './components/Navbar.js';
+import LeaderboardTable from './components/LeaderboardTable.js';
 
-class App extends Component {
+const cftcId = 2060;
+const crossfitLeaderboardEndpoint = `https://games.crossfit.com/competitions/open/2019/leaderboards?affiliate=${cftcId}&division=1&scaled=0&page=1`;
+
+class App extends React.Component {
+  state = {
+    loading: true,
+    affiliateData: {},
+  };
+  componentWillMount() {
+    // Fetch crossfit api
+    fetch(crossfitLeaderboardEndpoint)
+      .then(res => console.log(res))
+      .catch(e => console.log(e));
+  }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <Navbar />
+        <Container style={{ marginTop: 15 }}>
+          <Row>
+            <LeaderboardTable />
+          </Row>
+        </Container>
       </div>
     );
   }
