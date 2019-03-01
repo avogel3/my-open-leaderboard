@@ -5,9 +5,14 @@ import get from 'lodash/get';
 const getOpenData = (data, whitelistedAthletes) => {
   const sanitizeWhitelist = whitelistedAthletes.map(i => i.toLowerCase());
   const competition = get(data, 'competition', {});
-  const leaderboardRows = get(data, 'leaderboardRows', []).filter(row =>
-    sanitizeWhitelist.includes(get(row, 'entrant.competitorName').toLowerCase())
-  );
+  let leaderboardRows = get(data, 'leaderboardRows', []);
+  if (whitelistedAthletes.length > 0) {
+    leaderboardRows = leaderboardRows.filter(row =>
+      sanitizeWhitelist.includes(
+        get(row, 'entrant.competitorName').toLowerCase()
+      )
+    );
+  }
 
   const allRanks = leaderboardRows.map(row => get(row, 'overallRank'));
 
