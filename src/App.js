@@ -5,14 +5,9 @@ import Navbar from './components/Navbar.js';
 import LeaderboardTable from './components/LeaderboardTable.js';
 import LoadingSpinner from './components/LoadingSpinner.js';
 
-const WHITELISTED_ATHLETES = [
-  'Bayley Judah',
-  'Andrew Vogel',
-  'Zachary Beck',
-  'Nathaniel Pennington',
-  'Dylan Ward',
-  'Shane Biggar',
-];
+const WHITELISTED_ATHLETES = (process.env.REACT_APP_WHITELISTED_ATHLETES || '')
+  .split(',')
+  .filter(Boolean);
 
 const AppContainer = styled.div`
   display: flex;

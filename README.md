@@ -21,5 +21,7 @@ Currently I use a saved response from my Lambda Function in development. This is
 https://games.crossfit.com/competitions/api/v1/competitions/open/2019/leaderboards?affiliate=2060&division=1&scaled=0&page=1
 ```
 
+Optionally, you may want to filter athletes from your data. You can do this by specifying their `competitorName` as comma separated values in your `.env` file. See `.env.example`
+
 
 
