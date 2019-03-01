@@ -2,11 +2,10 @@ import React from 'react';
 import { Navbar as BootstrapNavbar } from 'react-bootstrap';
 
 const Navbar = () => (
-  <BootstrapNavbar bg="light" expand="lg">
+  <BootstrapNavbar bg="primary" variant="dark" expand="lg">
     <BootstrapNavbar.Brand href="#home">
-      MyOpenLeaderboard
+      MyOpenLeaderboard - {new Date().getFullYear()}
     </BootstrapNavbar.Brand>
-    <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
   </BootstrapNavbar>
 );
 

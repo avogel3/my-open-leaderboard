@@ -1,9 +1,24 @@
 import * as React from 'react';
 import { Row, Container } from 'react-bootstrap';
+import styled from 'styled-components';
 import Navbar from './components/Navbar.js';
 import LeaderboardTable from './components/LeaderboardTable.js';
 import LoadingSpinner from './components/LoadingSpinner.js';
-import Data from './data.json';
+
+const WHITELISTED_ATHLETES = [
+  'Bayley Judah',
+  'Andrew Vogel',
+  'Zachary Beck',
+  'Nathaniel Pennington',
+  'Dylan Ward',
+  'Shane Biggar',
+];
+
+const AppContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+`;
 
 class App extends React.Component {
   state = {
@@ -11,32 +26,43 @@ class App extends React.Component {
     affiliateData: {},
   };
   componentWillMount() {
-    fetch(process.env.REACT_APP_LEADERBOARD_LAMBDA_ENDPOINT)
-      .then(res => {
-        return res.json();
-      })
-      .catch(e => {
-        console.log(e);
-        this.setState({ loading: false });
-      })
-      .then(responseJson =>
-        this.setState({ affiliateData: responseJson, loading: false })
-      );
+    if (process.env.NODE_ENV === 'production') {
+      fetch(process.env.REACT_APP_LEADERBOARD_LAMBDA_ENDPOINT)
+        .then(res => {
+          return res.json();
+        })
+        .catch(e => {
+          console.log(e);
+          this.setState({ loading: false });
+        })
+        .then(responseJson =>
+          this.setState({ affiliateData: responseJson, loading: false })
+        );
+    } else {
+      console.log('Using sample data...');
+      const sampleData = require('./sampleData.json');
+      this.setState({ affiliateData: sampleData, loading: false });
+    }
   }
   render() {
-    console.log(this.state.affiliateData);
+    const { loading, affiliateData } = this.state;
     return (
-      <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+      <React.Fragment>
         <Navbar />
-        {this.state.loading && <LoadingSpinner />}
-        {!this.state.loading && (
-          <Container style={{ marginTop: 15 }}>
-            <Row>
-              <LeaderboardTable />
-            </Row>
-          </Container>
-        )}
-      </div>
+        <AppContainer>
+          {loading && <LoadingSpinner />}
+          {!loading && (
+            <Container style={{ marginTop: 15 }}>
+              <Row>
+                <LeaderboardTable
+                  data={affiliateData}
+                  whitelistedAthletes={WHITELISTED_ATHLETES}
+                />
+              </Row>
+            </Container>
+          )}
+        </AppContainer>
+      </React.Fragment>
     );
   }
 }

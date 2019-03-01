@@ -1,18 +1,19 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styled from 'styled-components';
+
+const SpinnerContainer = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+`;
 
 const LoadingSpinner = () => (
-  <div
-    style={{
-      display: 'flex',
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '80vh',
-    }}
-  >
+  <SpinnerContainer>
     <FontAwesomeIcon icon="spinner" size="6x" spin />
-  </div>
+  </SpinnerContainer>
 );
 
 export default LoadingSpinner;
