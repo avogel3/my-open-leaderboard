@@ -21,7 +21,8 @@ class App extends React.Component {
     affiliateData: {},
   };
   componentWillMount() {
-    if (process.env.NODE_ENV === 'production') {
+    document.title = 'MyOpenLeaderboard';
+    if (process.env.REACT_APP_STAGE === 'production') {
       fetch(process.env.REACT_APP_LEADERBOARD_LAMBDA_ENDPOINT)
         .then(res => {
           return res.json();
