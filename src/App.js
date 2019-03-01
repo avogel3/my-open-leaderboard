@@ -2,9 +2,8 @@ import * as React from 'react';
 import { Row, Container } from 'react-bootstrap';
 import Navbar from './components/Navbar.js';
 import LeaderboardTable from './components/LeaderboardTable.js';
-
-const cftcId = 2060;
-const crossfitLeaderboardEndpoint = `https://games.crossfit.com/competitions/open/2019/leaderboards?affiliate=${cftcId}&division=1&scaled=0&page=1`;
+import LoadingSpinner from './components/LoadingSpinner.js';
+import Data from './data.json';
 
 class App extends React.Component {
   state = {
@@ -12,20 +11,31 @@ class App extends React.Component {
     affiliateData: {},
   };
   componentWillMount() {
-    // Fetch crossfit api
-    fetch(crossfitLeaderboardEndpoint)
-      .then(res => console.log(res))
-      .catch(e => console.log(e));
+    fetch(process.env.REACT_APP_LEADERBOARD_LAMBDA_ENDPOINT)
+      .then(res => {
+        return res.json();
+      })
+      .catch(e => {
+        console.log(e);
+        this.setState({ loading: false });
+      })
+      .then(responseJson =>
+        this.setState({ affiliateData: responseJson, loading: false })
+      );
   }
   render() {
+    console.log(this.state.affiliateData);
     return (
-      <div>
+      <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
         <Navbar />
-        <Container style={{ marginTop: 15 }}>
-          <Row>
-            <LeaderboardTable />
-          </Row>
-        </Container>
+        {this.state.loading && <LoadingSpinner />}
+        {!this.state.loading && (
+          <Container style={{ marginTop: 15 }}>
+            <Row>
+              <LeaderboardTable />
+            </Row>
+          </Container>
+        )}
       </div>
     );
   }
